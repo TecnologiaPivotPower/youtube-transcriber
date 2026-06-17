@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const job = data as unknown as { id: string } | null;
 
     if (insertError || !job) {
-      console.error("Error creando job:", insertError);
+      console.error("Supabase error:", JSON.stringify(insertError, null, 2));
       return NextResponse.json(
         { error: "Error al crear el job en la base de datos" },
         { status: 500 }
