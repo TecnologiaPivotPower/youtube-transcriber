@@ -10,7 +10,7 @@ export async function GET(
 
     const { data: job, error } = await supabaseAdmin
       .from("jobs")
-      .select("status, error_msg")
+      .select("*")
       .eq("id", id)
       .single();
 
