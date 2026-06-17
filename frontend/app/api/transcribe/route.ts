@@ -23,11 +23,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data: job, error: insertError } = await supabaseAdmin
+    const { data, error: insertError } = await supabaseAdmin
       .from("jobs")
       .insert({ youtube_url: url, status: "pending" })
       .select("id")
       .single();
+
+    const job = data as unknown as { id: string } | null;
 
     if (insertError || !job) {
       console.error("Error creando job:", insertError);

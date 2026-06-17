@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import type { JobStatus } from "@/types/database";
 
 export async function GET(
   _request: NextRequest,
@@ -8,15 +9,17 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const { data: job, error } = await supabaseAdmin
+    const { data, error } = await supabaseAdmin
       .from("jobs")
       .select("*")
       .eq("id", id)
       .single();
 
-    if (error || !job) {
+    if (error || !data) {
       return NextResponse.json({ error: "Job no encontrado" }, { status: 404 });
     }
+
+    const job = data as unknown as { status: JobStatus; error_msg: string | null };
 
     return NextResponse.json({
       status: job.status,
